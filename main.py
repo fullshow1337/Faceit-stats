@@ -370,34 +370,25 @@ async def startup():
     await startup_event()
 
 if __name__ == "__main__":
-    import asyncio
+    # Определяем окружение
+    environment = os.getenv("ENVIRONMENT", "development")
     
-    async def init_and_run():
-        # Инициализируем базу данных и тестовые данные
-        await startup_event()
-        
-        # Определяем окружение
-        environment = os.getenv("ENVIRONMENT", "development")
-        
-        if environment == "production":
-            # Настройки для продакшена
-            uvicorn.run(
-                "main:app", 
-                host="0.0.0.0", 
-                port=int(os.getenv("PORT", 8000)), 
-                reload=False,
-                workers=int(os.getenv("WORKERS", 1)),
-                log_level="info"
-            )
-        else:
-            # Настройки для разработки
-            uvicorn.run(
-                "main:app", 
-                host="0.0.0.0", 
-                port=8000, 
-                reload=True,
-                log_level="info"
-            )
-    
-    # Запускаем инициализацию
-    asyncio.run(init_and_run())
+    if environment == "production":
+        # Настройки для продакшена
+        uvicorn.run(
+            "main:app", 
+            host="0.0.0.0", 
+            port=int(os.getenv("PORT", 8000)), 
+            reload=False,
+            workers=int(os.getenv("WORKERS", 1)),
+            log_level="info"
+        )
+    else:
+        # Настройки для разработки
+        uvicorn.run(
+            "main:app", 
+            host="0.0.0.0", 
+            port=8000, 
+            reload=True,
+            log_level="info"
+        )
