@@ -32,6 +32,32 @@ class FastFaceitClientHttpx:
         if self.client:
             await self.client.aclose()
     
+    async def check_image_availability(self, image_url: str) -> bool:
+        """Проверяет доступность изображения по URL"""
+        if not image_url:
+            return False
+        
+        try:
+            # Делаем HEAD запрос для проверки доступности изображения
+            response = await self.client.head(image_url, timeout=5.0)
+            
+            # Проверяем статус код и content-type
+            if response.status_code == 200:
+                content_type = response.headers.get('content-type', '').lower()
+                if content_type.startswith('image/'):
+                    logger.debug(f"Image is available: {image_url}")
+                    return True
+                else:
+                    logger.warning(f"URL is not an image (content-type: {content_type}): {image_url}")
+                    return False
+            else:
+                logger.warning(f"Image not available (status: {response.status_code}): {image_url}")
+                return False
+                
+        except Exception as e:
+            logger.warning(f"Error checking image availability: {e} for URL: {image_url}")
+            return False
+    
     async def get_player_by_steam_id(self, steam_id: str) -> Optional[Dict]:
         """Получает информацию об игроке по Steam ID"""
         try:
@@ -232,12 +258,23 @@ class FastFaceitClientHttpx:
         
         logger.info(f"Successfully processed {len(processed_matches)} matches out of {len(matches[:30])}")
         
+        # Проверяем доступность баннера
+        banner_url = player_data.get("cover_image")
+        valid_banner = None
+        if banner_url:
+            is_banner_available = await self.check_image_availability(banner_url)
+            if is_banner_available:
+                valid_banner = banner_url
+                logger.info(f"Banner is available for player {player_data.get('nickname')}: {banner_url}")
+            else:
+                logger.warning(f"Banner is not available for player {player_data.get('nickname')}: {banner_url}")
+        
         # Формируем финальный ответ в старом формате для совместимости
         result = {
             "player_id": player_id,
             "nickname": player_data.get("nickname"),
             "avatar": player_data.get("avatar"),
-            "banner": player_data.get("cover_image"),  # Добавляем banner
+            "banner": valid_banner,  # Добавляем только доступный banner или None
             "country": player_data.get("country"),
             "steam": {
                 "nickname": player_data.get("steam_nickname"),  # Добавляем steam nickname

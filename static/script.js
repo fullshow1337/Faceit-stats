@@ -251,11 +251,21 @@ document.addEventListener('DOMContentLoaded', function() {
             // Update player banner
             const playerBanner = document.getElementById('player-banner');
             if (data.banner) {
+                // Добавляем обработчик ошибки загрузки изображения
+                playerBanner.onerror = function() {
+                    console.warn('Failed to load banner image:', data.banner);
+                    this.style.display = 'none';
+                    this.src = '';
+                };
+                playerBanner.onload = function() {
+                    this.style.display = 'block';
+                };
                 playerBanner.src = data.banner;
-                playerBanner.style.display = 'block';
             } else {
                 playerBanner.style.display = 'none';
                 playerBanner.src = '';
+                playerBanner.onerror = null;
+                playerBanner.onload = null;
             }
 
             // Update CS2 level with SVG icon - показываем invalid.svg если есть баны
