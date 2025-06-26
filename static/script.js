@@ -152,6 +152,14 @@ document.addEventListener('DOMContentLoaded', function() {
     setLanguage(savedLanguage);
     updateFlag(savedLanguage);
 
+    // Скрываем карточку расширения, если мы НЕ на главной странице
+    if (window.location.pathname !== '/') {
+        const extensionCard = document.querySelector('.extension-info-card');
+        if (extensionCard) {
+            extensionCard.style.display = 'none';
+        }
+    }
+
     // Обработчик переключения языка
     document.getElementById('languageToggle').addEventListener('click', function() {
         const currentLang = document.documentElement.getAttribute('data-language') || 'ru';
@@ -589,10 +597,16 @@ document.addEventListener('DOMContentLoaded', function() {
             // Show result
             result.style.display = 'block';
             
-            // Скрываем live-feed при успешном поиске
+            // Скрываем live-feed и карточку расширения при успешном поиске
             const liveFeed = document.querySelector('.live-feed');
             if (liveFeed) {
                 liveFeed.style.display = 'none';
+            }
+            
+            // Скрываем карточку расширения при показе результатов
+            const extensionCard = document.querySelector('.extension-info-card');
+            if (extensionCard) {
+                extensionCard.style.display = 'none';
             }
             
             // Обновляем URL если есть Steam ID
@@ -611,11 +625,17 @@ document.addEventListener('DOMContentLoaded', function() {
             errorText.textContent = err.message;
             error.classList.remove('d-none');
             
-            // При ошибке показываем live-feed, если мы на главной странице
+            // При ошибке показываем live-feed и карточку расширения, если мы на главной странице
             if (window.location.pathname === '/') {
                 const liveFeed = document.querySelector('.live-feed');
                 if (liveFeed) {
                     liveFeed.style.display = 'block';
+                }
+                
+                // Показываем карточку расширения на главной при ошибке
+                const extensionCard = document.querySelector('.extension-info-card');
+                if (extensionCard) {
+                    extensionCard.style.display = 'block';
                 }
             }
         } finally {
@@ -647,10 +667,16 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('result').style.display = 'none';
             document.getElementById('error').classList.add('d-none');
             
-            // Показываем live-feed снова
+            // Показываем live-feed и карточку расширения снова
             const liveFeed = document.querySelector('.live-feed');
             if (liveFeed) {
                 liveFeed.style.display = 'block';
+            }
+            
+            // Показываем карточку расширения на главной
+            const extensionCard = document.querySelector('.extension-info-card');
+            if (extensionCard) {
+                extensionCard.style.display = 'block';
             }
         }
     });
