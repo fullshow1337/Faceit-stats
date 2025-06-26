@@ -38,7 +38,11 @@ const translations = {
         'minutes_ago': 'мин. назад',
         'hours_ago': 'ч. назад',
         'days_ago': 'дн. назад',
-        'Player has active bans': 'У игрока есть активные баны'
+        'Player has active bans': 'У игрока есть активные баны',
+        'Chrome Extension': 'Расширение Chrome',
+        'Chrome Extension Available': 'Доступно расширение Chrome',
+        'Get FACEIT stats directly on Steam profiles': 'Получайте статистику FACEIT прямо в профилях Steam',
+        'Install': 'Установить'
     },
     en: {
         'Get Statistics': 'Get Statistics',
@@ -78,7 +82,11 @@ const translations = {
         'minutes_ago': 'minutes ago',
         'hours_ago': 'hours ago',
         'days_ago': 'days ago',
-        'Player has active bans': 'Player has active bans'
+        'Player has active bans': 'Player has active bans',
+        'Chrome Extension': 'Chrome Extension',
+        'Chrome Extension Available': 'Chrome Extension Available',
+        'Get FACEIT stats directly on Steam profiles': 'Get FACEIT stats directly on Steam profiles',
+        'Install': 'Install'
     }
 };
 

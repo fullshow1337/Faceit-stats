@@ -360,6 +360,7 @@ class FastFaceitClientHttpx:
         logger.info(f"Complete player data retrieved in {result['processing_time']:.2f} seconds")
         return result
     
+
     def _determine_match_result(self, match_details: Dict, player_id: str) -> str:
         """Определяет результат матча для игрока"""
         # Логика определения результата
