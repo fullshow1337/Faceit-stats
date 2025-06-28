@@ -152,13 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setLanguage(savedLanguage);
     updateFlag(savedLanguage);
 
-    // Скрываем карточку расширения, если мы НЕ на главной странице
-    if (window.location.pathname !== '/') {
-        const extensionCard = document.querySelector('.extension-info-card');
-        if (extensionCard) {
-            extensionCard.style.display = 'none';
-        }
-    }
+
 
     // Обработчик переключения языка
     document.getElementById('languageToggle').addEventListener('click', function() {
