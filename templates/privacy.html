@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="Privacy Policy">Политика конфиденциальности - FACEIT Stats</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/static/style.css" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/static/faceit-icon.svg">
+    <script>
+        // Инициализация темы при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            
+            // Устанавливаем начальную тему
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            toggleSwitch.checked = currentTheme === 'dark';
+            
+            // Добавляем обработчик переключения темы
+            toggleSwitch.addEventListener('change', function(e) {
+                if (e.target.checked) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+
+            // Инициализация языка
+            const savedLanguage = localStorage.getItem('language') || 'ru';
+            setLanguage(savedLanguage);
+            updateFlag(savedLanguage);
+
+            // Обработчик переключения языка
+            document.getElementById('languageToggle').addEventListener('click', function() {
+                const currentLang = document.documentElement.getAttribute('data-language') || 'ru';
+                const newLang = currentLang === 'ru' ? 'en' : 'ru';
+                setLanguage(newLang);
+                updateFlag(newLang);
+                localStorage.setItem('language', newLang);
+            });
+        });
+
+        // Функция установки языка
+        function setLanguage(lang) {
+            document.documentElement.setAttribute('data-language', lang);
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        // Функция обновления флага
+        function updateFlag(lang) {
+            const flagPath = lang === 'ru' ? '/static/flags/ru.svg' : '/static/flags/us.svg';
+            document.getElementById('currentFlag').src = flagPath;
+        }
+
+        // Переводы
+        const translations = {
+            ru: {
+                'Privacy Policy': 'Политика конфиденциальности',
+                'Data Collection': 'Сбор информации',
+                'Data Usage': 'Использование информации',
+                'Data Storage': 'Хранение данных',
+                'Security': 'Безопасность',
+                'Cookies': 'Cookies',
+                'Third Party Services': 'Сторонние сервисы',
+                'User Rights': 'Права пользователей',
+                'Policy Changes': 'Изменения в политике',
+                'Contact': 'Контакты',
+                'Back to Home': 'Вернуться на главную',
+                'Our service collects': 'Наш сервис FACEIT Stats собирает следующие данные:',
+                'Steam URL for FACEIT': 'Steam URL пользователя для поиска профиля FACEIT',
+                'Public FACEIT data': 'Публичные данные профиля FACEIT (никнейм, аватар, статистика)',
+                'Match history': 'История матчей и статистика игр',
+                'Collected data is used': 'Собранная информация используется исключительно для:',
+                'Display player stats': 'Отображения статистики игрока',
+                'Provide match history': 'Предоставления истории матчей',
+                'Improve service': 'Улучшения работы сервиса',
+                'No personal data': 'Мы не храним персональные данные пользователей. Вся информация отображается в реальном времени через API FACEIT.',
+                'Security measures': 'Мы принимаем меры для защиты информации:',
+                'HTTPS connection': 'Используем защищенное HTTPS-соединение',
+                'No API keys': 'Не храним API ключи на клиентской стороне',
+                'Regular updates': 'Регулярно обновляем систему безопасности',
+                'Cookies usage': 'Мы используем только необходимые cookies для:',
+                'Theme preference': 'Сохранения выбранной темы оформления',
+                'Language preference': 'Сохранения выбранного языка интерфейса',
+                'Integrated APIs': 'Наш сервис интегрирован со следующими API:',
+                'FACEIT API': 'FACEIT API - для получения статистики игроков',
+                'Steam API': 'Steam API - для поиска профилей по Steam URL',
+                'Users have rights': 'Пользователи имеют право:',
+                'No Steam URL': 'Не предоставлять свой Steam URL',
+                'Clear cookies': 'Очистить cookies браузера',
+                'Contact privacy': 'Связаться с нами по вопросам конфиденциальности',
+                'Policy changes notice': 'Мы оставляем за собой право вносить изменения в политику конфиденциальности. Все изменения будут опубликованы на этой странице.',
+                'Privacy questions': 'По всем вопросам, связанным с конфиденциальностью, обращайтесь:'
+            },
+            en: {
+                'Privacy Policy': 'Privacy Policy',
+                'Data Collection': 'Data Collection',
+                'Data Usage': 'Data Usage',
+                'Data Storage': 'Data Storage',
+                'Security': 'Security',
+                'Cookies': 'Cookies',
+                'Third Party Services': 'Third Party Services',
+                'User Rights': 'User Rights',
+                'Policy Changes': 'Policy Changes',
+                'Contact': 'Contact',
+                'Back to Home': 'Back to Home',
+                'Our service collects': 'Our FACEIT Stats service collects the following data:',
+                'Steam URL for FACEIT': 'User\'s Steam URL for FACEIT profile search',
+                'Public FACEIT data': 'Public FACEIT profile data (nickname, avatar, statistics)',
+                'Match history': 'Match history and game statistics',
+                'Collected data is used': 'The collected information is used exclusively for:',
+                'Display player stats': 'Displaying player statistics',
+                'Provide match history': 'Providing match history',
+                'Improve service': 'Improving service functionality',
+                'No personal data': 'We do not store personal user data. All information is displayed in real-time through the FACEIT API.',
+                'Security measures': 'We take measures to protect information:',
+                'HTTPS connection': 'Using secure HTTPS connection',
+                'No API keys': 'Not storing API keys on the client side',
+                'Regular updates': 'Regularly updating the security system',
+                'Cookies usage': 'We use only necessary cookies for:',
+                'Theme preference': 'Saving theme preference',
+                'Language preference': 'Saving language preference',
+                'Integrated APIs': 'Our service is integrated with the following APIs:',
+                'FACEIT API': 'FACEIT API - for retrieving player statistics',
+                'Steam API': 'Steam API - for searching profiles by Steam URL',
+                'Users have rights': 'Users have the right to:',
+                'No Steam URL': 'Not provide their Steam URL',
+                'Clear cookies': 'Clear browser cookies',
+                'Contact privacy': 'Contact us regarding privacy matters',
+                'Policy changes notice': 'We reserve the right to make changes to the privacy policy. All changes will be published on this page.',
+                'Privacy questions': 'For all privacy-related questions, please contact:'
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="theme-switch-wrapper">
+        <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" />
+            <div class="slider round">
+                <i class="fas fa-sun"></i>
+                <i class="fas fa-moon"></i>
+            </div>
+        </label>
+        <div class="language-switch ms-3">
+            <button id="languageToggle" class="btn btn-link p-0" type="button">
+                <img src="/static/flags/ru.svg" alt="RU" class="language-flag" id="currentFlag">
+            </button>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="text-center mb-4" data-translate="Privacy Policy">Политика конфиденциальности</h1>
+                        
+                        <h2 data-translate="Data Collection">1. Сбор информации</h2>
+                        <p data-translate="Our service collects">Наш сервис FACEIT Stats собирает следующие данные:</p>
+                        <ul>
+                            <li data-translate="Steam URL for FACEIT">Steam URL пользователя для поиска профиля FACEIT</li>
+                            <li data-translate="Public FACEIT data">Публичные данные профиля FACEIT (никнейм, аватар, статистика)</li>
+                            <li data-translate="Match history">История матчей и статистика игр</li>
+                        </ul>
+
+                        <h2 data-translate="Data Usage">2. Использование информации</h2>
+                        <p data-translate="Collected data is used">Собранная информация используется исключительно для:</p>
+                        <ul>
+                            <li data-translate="Display player stats">Отображения статистики игрока</li>
+                            <li data-translate="Provide match history">Предоставления истории матчей</li>
+                            <li data-translate="Improve service">Улучшения работы сервиса</li>
+                        </ul>
+
+                        <h2 data-translate="Data Storage">3. Хранение данных</h2>
+                        <p data-translate="No personal data">Мы не храним персональные данные пользователей. Вся информация отображается в реальном времени через API FACEIT.</p>
+
+                        <h2 data-translate="Security">4. Безопасность</h2>
+                        <p data-translate="Security measures">Мы принимаем меры для защиты информации:</p>
+                        <ul>
+                            <li data-translate="HTTPS connection">Используем защищенное HTTPS-соединение</li>
+                            <li data-translate="No API keys">Не храним API ключи на клиентской стороне</li>
+                            <li data-translate="Regular updates">Регулярно обновляем систему безопасности</li>
+                        </ul>
+
+                        <h2 data-translate="Cookies">5. Cookies</h2>
+                        <p data-translate="Cookies usage">Мы используем только необходимые cookies для:</p>
+                        <ul>
+                            <li data-translate="Theme preference">Сохранения выбранной темы оформления</li>
+                            <li data-translate="Language preference">Сохранения выбранного языка интерфейса</li>
+                        </ul>
+
+                        <h2 data-translate="Third Party Services">6. Сторонние сервисы</h2>
+                        <p data-translate="Integrated APIs">Наш сервис интегрирован со следующими API:</p>
+                        <ul>
+                            <li data-translate="FACEIT API">FACEIT API - для получения статистики игроков</li>
+                            <li data-translate="Steam API">Steam API - для поиска профилей по Steam URL</li>
+                        </ul>
+
+                        <h2 data-translate="User Rights">7. Права пользователей</h2>
+                        <p data-translate="Users have rights">Пользователи имеют право:</p>
+                        <ul>
+                            <li data-translate="No Steam URL">Не предоставлять свой Steam URL</li>
+                            <li data-translate="Clear cookies">Очистить cookies браузера</li>
+                            <li data-translate="Contact privacy">Связаться с нами по вопросам конфиденциальности</li>
+                        </ul>
+
+                        <h2 data-translate="Policy Changes">8. Изменения в политике</h2>
+                        <p data-translate="Policy changes notice">Мы оставляем за собой право вносить изменения в политику конфиденциальности. Все изменения будут опубликованы на этой странице.</p>
+
+                        <h2 data-translate="Contact">9. Контакты</h2>
+                        <p data-translate="Privacy questions">По всем вопросам, связанным с конфиденциальностью, обращайтесь:</p>
+                        <ul>
+                            <li>Telegram: @fullshow</li>
+                        </ul>
+
+                        <div class="text-center mt-4">
+                            <a href="/" class="btn btn-primary">
+                                <i class="fas fa-home me-2"></i><span data-translate="Back to Home">Вернуться на главную</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/script.js"></script>
+</body>
+</html> 

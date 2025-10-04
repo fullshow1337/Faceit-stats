@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FACEIT Stats - сервис для просмотра статистики игроков FACEIT в CS2. Узнайте свой уровень, K/D, винрейт и историю матчей.">
+    <meta name="keywords" content="FACEIT, CS2, статистика, матчи, K/D, винрейт, уровень, Counter-Strike 2">
+    <meta name="author" content="FACEIT Stats">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="FACEIT Stats - Статистика CS2">
+    <meta property="og:description" content="Просмотр статистики игроков FACEIT в CS2. Узнайте свой уровень, K/D, винрейт и историю матчей.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.url }}">
+    <title>FACEIT Stats - Статистика CS2</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/static/style.css" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/static/faceit-icon.svg">
+</head>
+<body>
+    <div class="container mt-5">
+        <a href="/" style="text-decoration: none; color: inherit;">
+            <h1 class="text-center mb-4">
+                <img src="/static/faceit-icon.svg" alt="Faceit" class="me-2" style="width: 32px; height: 32px;">
+                FACEIT Stats
+            </h1>
+        </a>
+        
+        <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="checkbox">
+                <input type="checkbox" id="checkbox" />
+                <div class="slider round">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </div>
+            </label>
+        </div>
+        <div class="language-switch">
+            <button id="languageToggle" class="btn btn-link p-0" type="button">
+                <img src="/static/flags/ru.svg" alt="RU" class="language-flag" id="currentFlag">
+            </button>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <form id="statsForm">
+                            <div class="mb-4">
+                                <label for="steamUrl" class="form-label">
+                                    <i class="fas fa-link me-2"></i>
+                                    <span data-translate="Steam URL">Steam URL</span>
+                                </label>
+                                <input type="text" class="form-control" id="steamUrl" 
+                                       placeholder="https://steamcommunity.com/id/username" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search me-2"></i>
+                                <span data-translate="Get Statistics">Get Statistics</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Информация о расширении -->
+                <div class="extension-info-card mt-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <i class="fab fa-chrome text-primary me-3" style="font-size: 2rem;"></i>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">
+                                        <span data-translate="Chrome Extension Available">Chrome Extension Available</span>
+                                    </h6>
+                                    <p class="mb-1 text-muted">
+                                        <span data-translate="Get FACEIT stats directly on Steam profiles">Get FACEIT stats directly on Steam profiles</span>
+                                    </p>
+                                </div>
+                                <a href="https://chromewebstore.google.com/detail/faceit-stats-by-fullshow/inhkgoeogbpcgajfidjhopcblkmfdgpc" 
+                                   target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-download me-1"></i>
+                                    <span data-translate="Install">Install</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="error" class="alert alert-danger mt-4 d-none" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <span></span>
+                </div>
+
+                <div id="loading" class="text-center mt-4 d-none">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2" data-translate="Loading statistics...">Loading statistics...</p>
+                </div>
+
+                <!-- Live лента последних запросов -->
+                <div class="live-feed">
+                    <h5>
+                        <span class="live-indicator"></span>
+                        <span data-translate="Recent Searches">Последние поиски</span>
+                    </h5>
+                    <div class="recent-searches-list" id="recent-searches-list">
+                        <div class="live-feed-loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span data-translate="Loading recent searches...">Загрузка последних поисков...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="result" class="mt-4" style="display: none;">
+                    <div class="profile-card">
+                        <img class="profile-banner" id="player-banner" src="" alt="Баннер профиля">
+                        <img id="player-avatar" src="" alt="Player Avatar" class="rounded-circle">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <h2 class="profile-nickname" id="player-nickname"></h2>
+                            <div id="cs2-level" class="level-icon ms-2"></div>
+                        </div>
+                        <div class="profile-login" id="profile-login"></div>
+                    </div>
+
+                    <div class="bans-section" id="bans-section" style="display: none;">
+                        <h5 class="text-danger"><i class="fas fa-exclamation-triangle me-2"></i><span data-translate="Bans History">Bans History</span></h5>
+                        <div class="bans-list" id="bans-list"></div>
+                    </div>
+
+                    <div class="stats-card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="stats-section mb-4">
+                                        <h5 data-translate="Main Statistics" class="main-statistics-title">Main Statistics</h5>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="stats-label">CS2 ELO</span>
+                                            <span class="stats-value" id="cs2-elo">-</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="stats-label">CS:GO ELO</span>
+                                            <span class="stats-value" id="csgo-elo">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="stats-section">
+                                        <h5 data-translate="Additional Statistics" class="additional-statistics-title">Additional Statistics</h5>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="stats-label">K/D Ratio</span>
+                                            <span class="stats-value" id="kd-ratio">-</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="stats-label">Avg. Kills</span>
+                                            <span class="stats-value" id="cs2-avg">-</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="stats-label">Total Matches</span>
+                                            <span class="stats-value" id="total-matches">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="match-history mt-4">
+                        <h5 data-translate="Match History">Match History</h5>
+                        <div class="match-headers">
+                            <div class="match-header" data-translate="Date">Date</div>
+                            <div class="match-header" data-translate="Mode">Mode</div>
+                            <div class="match-header" data-translate="Result">Result</div>
+                            <div class="match-header" data-translate="Score">Score</div>
+                            <div class="match-header" data-translate="Map">Map</div>
+                            <div class="match-header">K/D/A</div>
+                        </div>
+                        <div class="match-list" id="match-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/script.js"></script>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title" data-translate="About">About</h3>
+                    <ul class="footer-links">
+                        <li>
+                            <a href="https://chromewebstore.google.com/detail/faceit-stats-by-fullshow/inhkgoeogbpcgajfidjhopcblkmfdgpc" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-chrome"></i>
+                                <span data-translate="Chrome Extension">Chrome Extension</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/fullshow1337/Faceit-stats" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-github"></i>
+                                <span data-translate="GitHub">GitHub</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://t.me/fullshow" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-telegram"></i>
+                                <span data-translate="Telegram">Telegram</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title" data-translate="Support">Support</h3>
+                    <ul class="footer-links">
+                        <li>
+                            <a href="https://www.donationalerts.com/r/fullshow">
+                                <i class="fas fa-heart"></i>
+                                <span data-translate="Donate">Donate</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://yoomoney.ru/to/4100118286430331" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-wallet"></i>
+                                <span data-translate="Yoomoney">Yoomoney</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title" data-translate="Legal">Legal</h3>
+                    <ul class="footer-links">
+                        <li>
+                            <a href="/privacy" data-translate="Privacy Policy">Privacy Policy</a>
+                        </li>
+                        <li>
+                            <a href="/terms" data-translate="Terms of Service">Terms of Service</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 FACEIT Stats. <span data-translate="All rights reserved">All rights reserved</span>.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 

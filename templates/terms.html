@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="Terms of Service">Условия использования - FACEIT Stats</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/static/style.css" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/static/faceit-icon.svg">
+    <script>
+        // Инициализация темы при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            
+            // Устанавливаем начальную тему
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            toggleSwitch.checked = currentTheme === 'dark';
+            
+            // Добавляем обработчик переключения темы
+            toggleSwitch.addEventListener('change', function(e) {
+                if (e.target.checked) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+
+            // Инициализация языка
+            const savedLanguage = localStorage.getItem('language') || 'ru';
+            setLanguage(savedLanguage);
+            updateFlag(savedLanguage);
+
+            // Обработчик переключения языка
+            document.getElementById('languageToggle').addEventListener('click', function() {
+                const currentLang = document.documentElement.getAttribute('data-language') || 'ru';
+                const newLang = currentLang === 'ru' ? 'en' : 'ru';
+                setLanguage(newLang);
+                updateFlag(newLang);
+                localStorage.setItem('language', newLang);
+            });
+        });
+
+        // Функция установки языка
+        function setLanguage(lang) {
+            document.documentElement.setAttribute('data-language', lang);
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        // Функция обновления флага
+        function updateFlag(lang) {
+            const flagPath = lang === 'ru' ? '/static/flags/ru.svg' : '/static/flags/us.svg';
+            document.getElementById('currentFlag').src = flagPath;
+        }
+
+        // Переводы
+        const translations = {
+            ru: {
+                'Terms of Service': 'Условия использования',
+                'General Terms': 'Общие положения',
+                'Service Usage': 'Условия использования сервиса',
+                'Usage Restrictions': 'Ограничения использования',
+                'Intellectual Property': 'Интеллектуальная собственность',
+                'Liability': 'Ограничение ответственности',
+                'Terms Changes': 'Изменения в условиях',
+                'Termination': 'Прекращение использования',
+                'Contact': 'Контакты',
+                'Back to Home': 'Вернуться на главную',
+                'Service agreement': 'Используя сервис FACEIT Stats, вы соглашаетесь с настоящими условиями использования. Сервис предоставляет доступ к статистике игроков FACEIT через их Steam URL.',
+                'Requirements': 'Для использования сервиса необходимо:',
+                'FACEIT account': 'Иметь действующий аккаунт FACEIT',
+                'Valid Steam URL': 'Предоставить корректный Steam URL',
+                'Follow API rules': 'Соблюдать правила использования API FACEIT',
+                'Prohibited actions': 'Запрещается:',
+                'Mass data collection': 'Использовать сервис для массового сбора данных',
+                'Violate rules': 'Нарушать правила FACEIT и Steam',
+                'Malicious use': 'Использовать сервис для вредоносных целей',
+                'Bypass API': 'Пытаться обойти ограничения API',
+                'IP rights': 'Все права на:',
+                'FACEIT logo': 'Логотип FACEIT принадлежат FACEIT Ltd',
+                'Steam logo': 'Логотип Steam принадлежат Valve Corporation',
+                'Service design': 'Дизайн и код сервиса принадлежат нам',
+                'No liability': 'Мы не несем ответственности за:',
+                'API accuracy': 'Точность данных, полученных через API FACEIT',
+                'Third party services': 'Работу сторонних сервисов (FACEIT, Steam)',
+                'Data loss': 'Потерю данных при сбоях в работе API',
+                'Terms changes notice': 'Мы оставляем за собой право изменять условия использования. Продолжение использования сервиса после изменений означает принятие новых условий.',
+                'Service termination': 'Мы можем прекратить доступ к сервису в случае:',
+                'Terms violation': 'Нарушения условий использования',
+                'API abuse': 'Злоупотребления API',
+                'Technical issues': 'Технических проблем',
+                'Contact questions': 'По всем вопросам обращайтесь:'
+            },
+            en: {
+                'Terms of Service': 'Terms of Service',
+                'General Terms': 'General Terms',
+                'Service Usage': 'Service Usage',
+                'Usage Restrictions': 'Usage Restrictions',
+                'Intellectual Property': 'Intellectual Property',
+                'Liability': 'Liability',
+                'Terms Changes': 'Terms Changes',
+                'Termination': 'Termination',
+                'Contact': 'Contact',
+                'Back to Home': 'Back to Home',
+                'Service agreement': 'By using the FACEIT Stats service, you agree to these terms of use. The service provides access to FACEIT player statistics through their Steam URL.',
+                'Requirements': 'To use the service, you must:',
+                'FACEIT account': 'Have an active FACEIT account',
+                'Valid Steam URL': 'Provide a valid Steam URL',
+                'Follow API rules': 'Comply with FACEIT API usage rules',
+                'Prohibited actions': 'The following is prohibited:',
+                'Mass data collection': 'Using the service for mass data collection',
+                'Violate rules': 'Violating FACEIT and Steam rules',
+                'Malicious use': 'Using the service for malicious purposes',
+                'Bypass API': 'Attempting to bypass API restrictions',
+                'IP rights': 'All rights to:',
+                'FACEIT logo': 'FACEIT logo belong to FACEIT Ltd',
+                'Steam logo': 'Steam logo belong to Valve Corporation',
+                'Service design': 'Service design and code belong to us',
+                'No liability': 'We are not responsible for:',
+                'API accuracy': 'Accuracy of data obtained through the FACEIT API',
+                'Third party services': 'Operation of third-party services (FACEIT, Steam)',
+                'Data loss': 'Data loss due to API failures',
+                'Terms changes notice': 'We reserve the right to change the terms of use. Continued use of the service after changes means acceptance of the new terms.',
+                'Service termination': 'We may terminate access to the service in case of:',
+                'Terms violation': 'Violation of terms of use',
+                'API abuse': 'API abuse',
+                'Technical issues': 'Technical issues',
+                'Contact questions': 'For all questions, please contact:'
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="theme-switch-wrapper">
+        <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" />
+            <div class="slider round">
+                <i class="fas fa-sun"></i>
+                <i class="fas fa-moon"></i>
+            </div>
+        </label>
+        <div class="language-switch ms-3">
+            <button id="languageToggle" class="btn btn-link p-0" type="button">
+                <img src="/static/flags/ru.svg" alt="RU" class="language-flag" id="currentFlag">
+            </button>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="text-center mb-4" data-translate="Terms of Service">Условия использования</h1>
+                        
+                        <h2 data-translate="General Terms">1. Общие положения</h2>
+                        <p data-translate="Service agreement">Используя сервис FACEIT Stats, вы соглашаетесь с настоящими условиями использования. Сервис предоставляет доступ к статистике игроков FACEIT через их Steam URL.</p>
+
+                        <h2 data-translate="Service Usage">2. Условия использования сервиса</h2>
+                        <p data-translate="Requirements">Для использования сервиса необходимо:</p>
+                        <ul>
+                            <li data-translate="FACEIT account">Иметь действующий аккаунт FACEIT</li>
+                            <li data-translate="Valid Steam URL">Предоставить корректный Steam URL</li>
+                            <li data-translate="Follow API rules">Соблюдать правила использования API FACEIT</li>
+                        </ul>
+
+                        <h2 data-translate="Usage Restrictions">3. Ограничения использования</h2>
+                        <p data-translate="Prohibited actions">Запрещается:</p>
+                        <ul>
+                            <li data-translate="Mass data collection">Использовать сервис для массового сбора данных</li>
+                            <li data-translate="Violate rules">Нарушать правила FACEIT и Steam</li>
+                            <li data-translate="Malicious use">Использовать сервис для вредоносных целей</li>
+                            <li data-translate="Bypass API">Пытаться обойти ограничения API</li>
+                        </ul>
+
+                        <h2 data-translate="Intellectual Property">4. Интеллектуальная собственность</h2>
+                        <p data-translate="IP rights">Все права на:</p>
+                        <ul>
+                            <li data-translate="FACEIT logo">Логотип FACEIT принадлежат FACEIT Ltd</li>
+                            <li data-translate="Steam logo">Логотип Steam принадлежат Valve Corporation</li>
+                            <li data-translate="Service design">Дизайн и код сервиса принадлежат нам</li>
+                        </ul>
+
+                        <h2 data-translate="Liability">5. Ограничение ответственности</h2>
+                        <p data-translate="No liability">Мы не несем ответственности за:</p>
+                        <ul>
+                            <li data-translate="API accuracy">Точность данных, полученных через API FACEIT</li>
+                            <li data-translate="Third party services">Работу сторонних сервисов (FACEIT, Steam)</li>
+                            <li data-translate="Data loss">Потерю данных при сбоях в работе API</li>
+                        </ul>
+
+                        <h2 data-translate="Terms Changes">6. Изменения в условиях</h2>
+                        <p data-translate="Terms changes notice">Мы оставляем за собой право изменять условия использования. Продолжение использования сервиса после изменений означает принятие новых условий.</p>
+
+                        <h2 data-translate="Termination">7. Прекращение использования</h2>
+                        <p data-translate="Service termination">Мы можем прекратить доступ к сервису в случае:</p>
+                        <ul>
+                            <li data-translate="Terms violation">Нарушения условий использования</li>
+                            <li data-translate="API abuse">Злоупотребления API</li>
+                            <li data-translate="Technical issues">Технических проблем</li>
+                        </ul>
+
+                        <h2 data-translate="Contact">8. Контакты</h2>
+                        <p data-translate="Contact questions">По всем вопросам обращайтесь:</p>
+                        <ul>
+                            <li>Telegram: @fullshow</li>
+                        </ul>
+
+                        <div class="text-center mt-4">
+                            <a href="/" class="btn btn-primary">
+                                <i class="fas fa-home me-2"></i><span data-translate="Back to Home">Вернуться на главную</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/script.js"></script>
+</body>
+</html> 
